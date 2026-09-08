@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FactLens — Fact Knowledge Layer</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont,
+                         "Segoe UI", sans-serif;
+            background: #f6f7fb;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        /* ---------------- HEADER ---------------- */
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e7e9ef;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 42px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #635bff, #8b5cf6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .brand h1 {
+            font-size: 19px;
+            letter-spacing: -0.3px;
+        }
+
+        .brand span {
+            color: #7b8191;
+            font-size: 13px;
+            margin-left: 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* ---------------- BUTTONS ---------------- */
+
+        button {
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .btn-primary {
+            background: #635bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5148e8;
+        }
+
+        .btn-secondary {
+            background: #f0f1f6;
+            color: #33394a;
+        }
+
+        .btn-secondary:hover {
+            background: #e6e7ee;
+        }
+
+        .btn-danger {
+            background: #fff0f0;
+            color: #d63d3d;
+        }
+
+        /* ---------------- MAIN ---------------- */
+
+        main {
+            max-width: 1250px;
+            margin: auto;
+            padding: 38px 28px 70px;
+        }
+
+        .hero {
+            margin-bottom: 28px;
+        }
+
+        .hero h2 {
+            font-size: 30px;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #6e7484;
+            font-size: 14px;
+            max-width: 720px;
+            line-height: 1.6;
+        }
+
+        /* ---------------- UPLOAD ---------------- */
+
+        .upload-card {
+            background: white;
+            border: 1px solid #e5e7ed;
+            border-radius: 16px;
+            padding: 26px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 18px rgba(25, 30, 50, 0.04);
+        }
+
+        .upload-zone {
+            border: 2px dashed #d8dbe5;
+            border-radius: 13px;
+            min-height: 190px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 25px;
+            transition: 0.2s;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: #635bff;
+            background: #fafaff;
+        }
+
+        .upload-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: #eeecff;
+            color: #635bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            margin-bottom: 13px;
+        }
+
+        .upload-zone h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .upload-zone p {
+            color: #858a98;
+            font-size: 13px;
+            margin-bottom: 17px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 15px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 13px;
+            background: #f8f9fc;
+            border-radius: 9px;
+            margin-top: 7px;
+            font-size: 13px;
+        }
+
+        .file-status {
+            color: #35a06d;
+            font-weight: 600;
+        }
+
+        /* ---------------- ACTION BAR ---------------- */
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .action-left {
+            color: #777d8c;
+            font-size: 13px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 9px;
+        }
+
+        /* ---------------- STATS ---------------- */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e5e7ed;
+            border-radius: 13px;
+            padding: 19px;
+        }
+
+        .stat-label {
+            color: #7d8392;
+            font-size: 12px;
+            margin-bottom: 9px;
+        }
+
+        .stat-value {
+            font-size: 25px;
+            font-weight: 750;
+        }
+
+        /* ---------------- TABS ---------------- */
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            background: #eceef4;
+            padding: 4px;
+            border-radius: 10px;
+            width: fit-content;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 9px 18px;
+            border-radius: 7px;
+            background: transparent;
+            color: #707687;
+            font-size: 13px;
+        }
+
+        .tab.active {
+            background: white;
+            color: #252a38;
+            box-shadow: 0 2px 7px rgba(0,0,0,0.06);
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        /* ---------------- FACT CARDS ---------------- */
+
+        .fact-card {
+            background: white;
+            border: 1px solid #e5e7ed;
+            border-radius: 13px;
+            padding: 19px;
+            margin-bottom: 12px;
+        }
+
+        .fact-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 11px;
+        }
+
+        .fact-text {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            background: #eeecff;
+            color: #5a51e8;
+        }
+
+        .fact-meta {
+            color: #777d8c;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .evidence {
+            background: #f8f9fc;
+            border-left: 3px solid #635bff;
+            border-radius: 5px;
+            padding: 11px 13px;
+            color: #555b6a;
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        /* ---------------- RELATIONSHIPS ---------------- */
+
+        .relationship-card {
+            background: white;
+            border: 1px solid #e5e7ed;
+            border-radius: 13px;
+            padding: 20px;
+            margin-bottom: 13px;
+        }
+
+        .relationship-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .relation-badge {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 750;
+        }
+
+        .corroborated {
+            background: #eaf8f1;
+            color: #21865a;
+        }
+
+        .contradicted {
+            background: #fff0f0;
+            color: #d13c45;
+        }
+
+        .context {
+            background: #fff7e6;
+            color: #a66a00;
+        }
+
+        .uncertain {
+            background: #eef1f6;
+            color: #687083;
+        }
+
+        .fact-comparison {
+            display: grid;
+            grid-template-columns: 1fr 35px 1fr;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .comparison-box {
+            background: #f8f9fc;
+            padding: 14px;
+            border-radius: 9px;
+        }
+
+        .comparison-doc {
+            font-size: 11px;
+            color: #777d8c;
+            margin-bottom: 7px;
+        }
+
+        .comparison-fact {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.45;
+        }
+
+        .arrow {
+            text-align: center;
+            color: #9298a7;
+            font-size: 18px;
+        }
+
+        .reasoning {
+            margin-top: 14px;
+            padding: 13px;
+            background: #f7f7ff;
+            border-radius: 9px;
+            font-size: 12px;
+            color: #555b6a;
+            line-height: 1.55;
+        }
+
+        /* ---------------- FOUR CASES ---------------- */
+
+        .section-title {
+            margin: 38px 0 15px;
+        }
+
+        .section-title h2 {
+            font-size: 19px;
+        }
+
+        .section-title p {
+            color: #7a8090;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .cases {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .case-card {
+            background: white;
+            border: 1px solid #e5e7ed;
+            border-radius: 13px;
+            padding: 20px;
+        }
+
+        .case-number {
+            font-size: 11px;
+            font-weight: 800;
+            color: #635bff;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .case-card h3 {
+            font-size: 15px;
+            margin-bottom: 7px;
+        }
+
+        .case-card p {
+            font-size: 12px;
+            color: #747a89;
+            line-height: 1.5;
+        }
+
+        .case-count {
+            margin-top: 15px;
+            font-size: 23px;
+            font-weight: 750;
+        }
+
+        .case-example {
+            margin-top: 14px;
+            background: #f8f9fc;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* ---------------- EMPTY / LOADING ---------------- */
+
+        .empty {
+            background: white;
+            border: 1px solid #e5e7ed;
+            border-radius: 13px;
+            padding: 45px;
+            text-align: center;
+            color: #858a98;
+            font-size: 13px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 25px;
+            color: #747a89;
+            font-size: 13px;
+        }
+
+        /* ---------------- TOAST ---------------- */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #202535;
+            color: white;
+            padding: 13px 18px;
+            border-radius: 9px;
+            font-size: 13px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: 0.25s;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ---------------- RESPONSIVE ---------------- */
+
+        @media (max-width: 850px) {
+
+            header {
+                padding: 0 20px;
+            }
+
+            main {
+                padding: 28px 17px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cases {
+                grid-template-columns: 1fr;
+            }
+
+            .fact-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .brand span {
+                display: none;
+            }
+
+            .header-actions {
+                display: none;
+            }
+
+            .action-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="brand">
+        <div class="brand-icon">F</div>
+
+        <div>
+            <h1>FactLens</h1>
+            <span>Fact Knowledge Layer</span>
+        </div>
+    </div>
+
+    <div class="header-actions">
+        <button class="btn btn-secondary" onclick="loadAll()">
+            Refresh
+        </button>
+
+        <button class="btn btn-danger" onclick="clearDatabase()">
+            Clear Data
+        </button>
+    </div>
+
+</header>
+
+
+<main>
+
+    <section class="hero">
+
+        <h2>Turn documents into connected facts.</h2>
+
+        <p>
+            Upload multiple PDFs, extract evidence-backed facts,
+            and discover corroboration, contradictions and
+            context-dependent differences across documents.
+        </p>
+
+    </section>
+
+
+    <!-- UPLOAD -->
+
+    <section class="upload-card">
+
+        <div
+            class="upload-zone"
+            id="uploadZone"
+            onclick="document.getElementById('fileInput').click()"
+        >
+
+            <div class="upload-icon">
+                ↑
+            </div>
+
+            <h3>Upload PDF documents</h3>
+
+            <p>
+                Drag & drop your PDFs here or click to browse
+            </p>
+
+            <button
+                class="btn btn-primary"
+                type="button"
+                onclick="event.stopPropagation(); document.getElementById('fileInput').click()"
+            >
+                Choose PDFs
+            </button>
+
+            <input
+                id="fileInput"
+                type="file"
+                accept=".pdf"
+                multiple
+                onchange="handleFiles(this.files)"
+            >
+
+        </div>
+
+        <div id="fileList" class="file-list"></div>
+
+    </section>
+
+
+    <!-- ACTIONS -->
+
+    <div class="action-bar">
+
+        <div class="action-left" id="statusText">
+            Upload documents to begin analysis.
+        </div>
+
+        <div class="action-buttons">
+
+            <button
+                class="btn btn-primary"
+                onclick="analyzeRelationships()"
+            >
+                Analyze Relationships
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <div class="stat-label">Documents</div>
+            <div class="stat-value" id="documentCount">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Facts Extracted</div>
+            <div class="stat-value" id="factCount">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Relationships</div>
+            <div class="stat-value" id="relationshipCount">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Extraction Issues</div>
+            <div class="stat-value" id="failureCount">0</div>
+        </div>
+
+    </section>
+
+
+    <!-- TABS -->
+
+    <div class="tabs">
+
+        <button
+            class="tab active"
+            onclick="showTab('facts', this)"
+        >
+            Facts
+        </button>
+
+        <button
+            class="tab"
+            onclick="showTab('relationships', this)"
+        >
+            Relationships
+        </button>
+
+    </div>
+
+
+    <!-- FACTS -->
+
+    <section id="facts" class="panel active">
+
+        <div id="factsContainer">
+            <div class="empty">
+                No facts extracted yet.
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- RELATIONSHIPS -->
+
+    <section id="relationships" class="panel">
+
+        <div id="relationshipsContainer">
+            <div class="empty">
+                No relationships analyzed yet.
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- FOUR CASES -->
+
+    <section>
+
+        <div class="section-title">
+
+            <h2>The Four Required Cases</h2>
+
+            <p>
+                Evidence-backed examples required by the assignment.
+            </p>
+
+        </div>
+
+
+        <div class="cases">
+
+            <!-- CASE 1 -->
+
+            <div class="case-card">
+
+                <div class="case-number">
+                    Case 01
+                </div>
+
+                <h3>Corroboration</h3>
+
+                <p>
+                    The same underlying fact is supported by
+                    multiple documents, even when wording differs.
+                </p>
+
+                <div
+                    class="case-count"
+                    id="corroborationCount"
+                >
+                    0
+                </div>
+
+                <div
+                    class="case-example"
+                    id="corroborationExample"
+                >
+                    No example found yet.
+                </div>
+
+            </div>
+
+
+            <!-- CASE 2 -->
+
+            <div class="case-card">
+
+                <div class="case-number">
+                    Case 02
+                </div>
+
+                <h3>Genuine Contradiction</h3>
+
+                <p>
+                    Two documents make incompatible claims about
+                    the same fact and comparable context.
+                </p>
+
+                <div
+                    class="case-count"
+                    id="contradictionCount"
+                >
+                    0
+                </div>
+
+                <div
+                    class="case-example"
+                    id="contradictionExample"
+                >
+                    No example found yet.
+                </div>
+
+            </div>
+
+
+            <!-- CASE 3 -->
+
+            <div class="case-card">
+
+                <div class="case-number">
+                    Case 03
+                </div>
+
+                <h3>Reconciled by Context</h3>
+
+                <p>
+                    An apparent contradiction is explained by
+                    differences in time, scope, units or definitions.
+                </p>
+
+                <div
+                    class="case-count"
+                    id="contextCount"
+                >
+                    0
+                </div>
+
+                <div
+                    class="case-example"
+                    id="contextExample"
+                >
+                    No example found yet.
+                </div>
+
+            </div>
+
+
+            <!-- CASE 4 -->
+
+            <div class="case-card">
+
+                <div class="case-number">
+                    Case 04
+                </div>
+
+                <h3>Extraction / Reasoning Failure</h3>
+
+                <p>
+                    The system records cases where extraction,
+                    evidence validation or reasoning fails.
+                </p>
+
+                <div
+                    class="case-count"
+                    id="failureCaseCount"
+                >
+                    0
+                </div>
+
+                <div
+                    class="case-example"
+                    id="failureExample"
+                >
+                    No failure recorded yet.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+    // --------------------------------------------------
+    // TOAST
+    // --------------------------------------------------
+
+    function showToast(message) {
+
+        const toast = document.getElementById("toast");
+
+        toast.textContent = message;
+
+        toast.classList.add("show");
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 3000);
+    }
+
+
+    // --------------------------------------------------
+    // TABS
+    // --------------------------------------------------
+
+    function showTab(tabName, button) {
+
+        document
+            .querySelectorAll(".panel")
+            .forEach(panel => panel.classList.remove("active"));
+
+        document
+            .querySelectorAll(".tab")
+            .forEach(tab => tab.classList.remove("active"));
+
+        document
+            .getElementById(tabName)
+            .classList.add("active");
+
+        button.classList.add("active");
+    }
+
+
+    // --------------------------------------------------
+    // FILE UPLOAD
+    // --------------------------------------------------
+
+    async function handleFiles(files) {
+
+        const fileList = document.getElementById("fileList");
+
+        for (const file of files) {
+
+            if (!file.name.toLowerCase().endsWith(".pdf")) {
+
+                showToast(
+                    `${file.name} is not a PDF.`
+                );
+
+                continue;
+            }
+
+            const item = document.createElement("div");
+
+            item.className = "file-item";
+
+            item.innerHTML = `
+                <span>${escapeHtml(file.name)}</span>
+                <span class="file-status">
+                    Processing...
+                </span>
+            `;
+
+            fileList.appendChild(item);
+
+            const formData = new FormData();
+
+            formData.append("file", file);
+
+            try {
+
+                const response = await fetch(
+                    "/upload",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.error || "Upload failed."
+                    );
+                }
+
+                item.querySelector(".file-status")
+                    .textContent =
+                    `${result.facts_extracted} facts extracted`;
+
+                showToast(
+                    `${file.name} processed successfully.`
+                );
+
+            } catch (error) {
+
+                item.querySelector(".file-status")
+                    .textContent = "Failed";
+
+                item.querySelector(".file-status")
+                    .style.color = "#d13c45";
+
+                showToast(error.message);
+            }
+        }
+
+        loadAll();
+    }
+
+
+    // --------------------------------------------------
+    // ANALYZE
+    // --------------------------------------------------
+
+    async function analyzeRelationships() {
+
+        const status =
+            document.getElementById("statusText");
+
+        status.textContent =
+            "Analyzing facts across documents...";
+
+        try {
+
+            const response = await fetch(
+                "/analyze",
+                {
+                    method: "POST"
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.error || "Analysis failed."
+                );
+            }
+
+            status.textContent =
+                `${result.relationships_found} relationships found.`;
+
+            showToast(
+                "Cross-document analysis completed."
+            );
+
+            await loadAll();
+
+            document
+                .querySelectorAll(".tab")
+                .forEach(tab => tab.classList.remove("active"));
+
+            document
+                .querySelectorAll(".panel")
+                .forEach(panel => panel.classList.remove("active"));
+
+            document
+                .querySelector(".tab:nth-child(2)")
+                .classList.add("active");
+
+            document
+                .getElementById("relationships")
+                .classList.add("active");
+
+        } catch (error) {
+
+            status.textContent =
+                "Analysis failed.";
+
+            showToast(error.message);
+        }
+    }
+
+
+    // --------------------------------------------------
+    // LOAD EVERYTHING
+    // --------------------------------------------------
+
+    async function loadAll() {
+
+        await loadFacts();
+        await loadRelationships();
+        await loadCases();
+    }
+
+
+    // --------------------------------------------------
+    // FACTS
+    // --------------------------------------------------
+
+    async function loadFacts() {
+
+        try {
+
+            const response =
+                await fetch("/facts");
+
+            const facts =
+                await response.json();
+
+            const container =
+                document.getElementById(
+                    "factsContainer"
+                );
+
+            document.getElementById(
+                "factCount"
+            ).textContent = facts.length;
+
+            const documents =
+                new Set(
+                    facts.map(fact => fact.document)
+                );
+
+            document.getElementById(
+                "documentCount"
+            ).textContent = documents.size;
+
+            if (facts.length === 0) {
+
+                container.innerHTML = `
+                    <div class="empty">
+                        No facts extracted yet.
+                    </div>
+                `;
+
+                return;
+            }
+
+            container.innerHTML = facts.map(fact => `
+
+                <div class="fact-card">
+
+                    <div class="fact-top">
+
+                        <div class="fact-text">
+                            ${escapeHtml(fact.fact)}
+                        </div>
+
+                        <span class="badge">
+                            ${escapeHtml(fact.type)}
+                        </span>
+
+                    </div>
+
+                    <div class="fact-meta">
+                        ${escapeHtml(fact.document)}
+                        · Page ${fact.page}
+                        · Confidence
+                        ${Math.round(
+                            (fact.confidence || 0) * 100
+                        )}%
+                    </div>
+
+                    <div class="evidence">
+                        <strong>Source evidence:</strong><br>
+                        "${escapeHtml(fact.source)}"
+                    </div>
+
+                </div>
+
+            `).join("");
+
+        } catch (error) {
+
+            console.error(error);
+        }
+    }
+
+
+    // --------------------------------------------------
+    // RELATIONSHIPS
+    // --------------------------------------------------
+
+    async function loadRelationships() {
+
+        try {
+
+            const response =
+                await fetch("/relationships");
+
+            const relationships =
+                await response.json();
+
+            const container =
+                document.getElementById(
+                    "relationshipsContainer"
+                );
+
+            document.getElementById(
+                "relationshipCount"
+            ).textContent =
+                relationships.length;
+
+            if (relationships.length === 0) {
+
+                container.innerHTML = `
+                    <div class="empty">
+                        No relationships analyzed yet.
+                    </div>
+                `;
+
+                return;
+            }
+
+            container.innerHTML =
+                relationships.map(rel => {
+
+                    let badgeClass = "uncertain";
+
+                    if (rel.relationship === "CORROBORATED") {
+                        badgeClass = "corroborated";
+                    }
+
+                    if (rel.relationship === "CONTRADICTED") {
+                        badgeClass = "contradicted";
+                    }
+
+                    if (
+                        rel.relationship ===
+                        "RECONCILED_BY_CONTEXT"
+                    ) {
+                        badgeClass = "context";
+                    }
+
+                    const label =
+                        rel.relationship
+                            .replaceAll("_", " ");
+
+                    return `
+
+                        <div class="relationship-card">
+
+                            <div class="relationship-header">
+
+                                <span class="
+                                    relation-badge
+                                    ${badgeClass}
+                                ">
+                                    ${label}
+                                </span>
+
+                                <span class="fact-meta">
+                                    Confidence
+                                    ${Math.round(
+                                        (rel.confidence || 0) * 100
+                                    )}%
+                                </span>
+
+                            </div>
+
+
+                            <div class="fact-comparison">
+
+                                <div class="comparison-box">
+
+                                    <div class="comparison-doc">
+                                        ${escapeHtml(
+                                            rel.document1
+                                        )}
+                                        · Page ${rel.page1}
+                                    </div>
+
+                                    <div class="comparison-fact">
+                                        ${escapeHtml(
+                                            rel.fact1
+                                        )}
+                                    </div>
+
+                                    <div class="evidence"
+                                         style="margin-top:10px;">
+                                        "${escapeHtml(
+                                            rel.source1
+                                        )}"
+                                    </div>
+
+                                </div>
+
+
+                                <div class="arrow">
+                                    ↔
+                                </div>
+
+
+                                <div class="comparison-box">
+
+                                    <div class="comparison-doc">
+                                        ${escapeHtml(
+                                            rel.document2
+                                        )}
+                                        · Page ${rel.page2}
+                                    </div>
+
+                                    <div class="comparison-fact">
+                                        ${escapeHtml(
+                                            rel.fact2
+                                        )}
+                                    </div>
+
+                                    <div class="evidence"
+                                         style="margin-top:10px;">
+                                        "${escapeHtml(
+                                            rel.source2
+                                        )}"
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="reasoning">
+
+                                <strong>System reasoning:</strong><br>
+
+                                ${escapeHtml(
+                                    rel.explanation
+                                )}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }).join("");
+
+        } catch (error) {
+
+            console.error(error);
+        }
+    }
+
+
+    // --------------------------------------------------
+    // FOUR CASES
+    // --------------------------------------------------
+
+    async function loadCases() {
+
+        try {
+
+            const response =
+                await fetch("/four-cases");
+
+            const data =
+                await response.json();
+
+            const counts = data.counts;
+            const cases = data.cases;
+
+
+            document.getElementById(
+                "corroborationCount"
+            ).textContent =
+                counts.corroboration;
+
+
+            document.getElementById(
+                "contradictionCount"
+            ).textContent =
+                counts.contradiction;
+
+
+            document.getElementById(
+                "contextCount"
+            ).textContent =
+                counts.context;
+
+
+            document.getElementById(
+                "failureCaseCount"
+            ).textContent =
+                counts.extraction_failure;
+
+
+            // Case 1
+
+            if (cases.corroboration.length > 0) {
+
+                const c =
+                    cases.corroboration[0];
+
+                document.getElementById(
+                    "corroborationExample"
+                ).innerHTML = `
+
+                    <strong>
+                        ${escapeHtml(c.document1)}
+                    </strong>
+                    vs
+                    <strong>
+                        ${escapeHtml(c.document2)}
+                    </strong>
+                    <br><br>
+
+                    ${escapeHtml(c.fact1)}
+                    <br><br>
+
+                    <em>
+                        ${escapeHtml(c.explanation)}
+                    </em>
+
+                `;
+
+            }
+
+
+            // Case 2
+
+            if (cases.contradiction.length > 0) {
+
+                const c =
+                    cases.contradiction[0];
+
+                document.getElementById(
+                    "contradictionExample"
+                ).innerHTML = `
+
+                    <strong>
+                        ${escapeHtml(c.document1)}
+                    </strong>
+                    vs
+                    <strong>
+                        ${escapeHtml(c.document2)}
+                    </strong>
+                    <br><br>
+
+                    ${escapeHtml(c.fact1)}
+                    <br><br>
+
+                    <em>
+                        ${escapeHtml(c.explanation)}
+                    </em>
+
+                `;
+
+            }
+
+
+            // Case 3
+
+            if (cases.context.length > 0) {
+
+                const c =
+                    cases.context[0];
+
+                document.getElementById(
+                    "contextExample"
+                ).innerHTML = `
+
+                    <strong>
+                        ${escapeHtml(c.document1)}
+                    </strong>
+                    vs
+                    <strong>
+                        ${escapeHtml(c.document2)}
+                    </strong>
+                    <br><br>
+
+                    ${escapeHtml(c.fact1)}
+                    <br><br>
+
+                    <em>
+                        ${escapeHtml(c.explanation)}
+                    </em>
+
+                `;
+
+            }
+
+
+            // Case 4
+
+            if (cases.extraction_failure.length > 0) {
+
+                const f =
+                    cases.extraction_failure[0];
+
+                document.getElementById(
+                    "failureExample"
+                ).innerHTML = `
+
+                    <strong>
+                        ${escapeHtml(f.document)}
+                    </strong>
+
+                    ${f.page
+                        ? `· Page ${f.page}`
+                        : ""}
+
+                    <br><br>
+
+                    <strong>
+                        ${escapeHtml(f.type)}
+                    </strong>
+
+                    <br>
+
+                    ${escapeHtml(f.message)}
+
+                `;
+
+            }
+
+
+            document.getElementById(
+                "failureCount"
+            ).textContent =
+                counts.extraction_failure;
+
+        } catch (error) {
+
+            console.error(error);
+        }
+    }
+
+
+    // --------------------------------------------------
+    // CLEAR DATABASE
+    // --------------------------------------------------
+
+    async function clearDatabase() {
+
+        const confirmed =
+            confirm(
+                "Clear all documents, facts and analysis results?"
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    "/clear",
+                    {
+                        method: "POST"
+                    }
+                );
+
+            const result =
+                await response.json();
+
+            if (!result.success) {
+                throw new Error(
+                    result.error || "Could not clear data."
+                );
+            }
+
+            document.getElementById(
+                "fileList"
+            ).innerHTML = "";
+
+            showToast("All data cleared.");
+
+            await loadAll();
+
+        } catch (error) {
+
+            showToast(error.message);
+        }
+    }
+
+
+    // --------------------------------------------------
+    // DRAG & DROP
+    // --------------------------------------------------
+
+    const uploadZone =
+        document.getElementById("uploadZone");
+
+    uploadZone.addEventListener(
+        "dragover",
+        event => {
+
+            event.preventDefault();
+
+            uploadZone.classList.add("dragover");
+        }
+    );
+
+    uploadZone.addEventListener(
+        "dragleave",
+        () => {
+
+            uploadZone.classList.remove("dragover");
+        }
+    );
+
+    uploadZone.addEventListener(
+        "drop",
+        event => {
+
+            event.preventDefault();
+
+            uploadZone.classList.remove("dragover");
+
+            handleFiles(event.dataTransfer.files);
+        }
+    );
+
+
+    // --------------------------------------------------
+    // HTML ESCAPE
+    // --------------------------------------------------
+
+    function escapeHtml(value) {
+
+        if (value === null || value === undefined) {
+            return "";
+        }
+
+        return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+
+    // --------------------------------------------------
+    // INITIAL LOAD
+    // --------------------------------------------------
+
+    loadAll();
+
+</script>
+
+</body>
+</html>
