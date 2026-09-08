@@ -79,7 +79,7 @@ A lightweight document intelligence system that extracts meaningful facts from P
 ### 1. Clone the repository
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone https://github.com/shikha033/FactLens-Fact-Knowledge-Layer.git
 cd fact-knowledge-layer
 ```
 
