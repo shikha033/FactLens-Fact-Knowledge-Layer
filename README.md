@@ -2,6 +2,8 @@
 
 A lightweight document intelligence system that extracts meaningful facts from PDFs, grounds every fact in source evidence, and compares facts across documents to identify corroboration, contradiction, and context-dependent differences.
 
+🌐 Live Demo: [FactLens](https://drive.google.com/file/d/18OszFxsjstSq5muhwONEpNgOtMF8mQe_/view?usp=sharing)
+
 ## Features
 
 - Upload one or multiple PDF documents
